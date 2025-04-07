@@ -1,1 +1,1 @@
-# milkflix-react
+# Milkflix-React

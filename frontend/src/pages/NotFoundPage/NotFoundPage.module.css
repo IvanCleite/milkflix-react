@@ -1,0 +1,24 @@
+.notFoundContainer {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  h1 {
+    font-size: 4rem;
+    color: #d9534f;
+  }
+  
+  .backButton {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    color: white;
+    background-color: #0275d8;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  
+  .backButton:hover {
+    background-color: #025aa5;
+  }
+  

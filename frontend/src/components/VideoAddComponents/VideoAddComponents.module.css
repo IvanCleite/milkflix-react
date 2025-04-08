@@ -1,0 +1,20 @@
+.container {
+  min-width: 326.25px;
+  /* display: flex; */
+  justify-content: center;
+}
+
+.divVideo {
+  position: relative;
+  width: fit-content;
+  display: inline-block;
+}
+
+.video {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 580px;
+  object-fit: contain;
+  display: block;
+}

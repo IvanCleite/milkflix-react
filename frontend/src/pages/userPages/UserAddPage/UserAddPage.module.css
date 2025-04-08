@@ -1,0 +1,15 @@
+input::placeholder {
+  color: gray !important;
+  font-style: italic; /* Opcional: estilização extra */
+}
+
+textarea::placeholder {
+  color: gray !important;
+  font-style: italic; /* Opcional: estilização extra */
+}
+
+select option:first-child {
+    color: gray !important;
+    font-style: italic !important;
+  }
+  

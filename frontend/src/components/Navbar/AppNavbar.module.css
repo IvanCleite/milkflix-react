@@ -1,0 +1,23 @@
+.toggle {
+  padding: 0;
+  width: 32px;
+  height: 30px;
+}
+
+.navbar {
+  background-color: rgb(115, 114, 114) !important;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Força o NavDropdown a ter a mesma aparência do Nav.Link quando desativado */
+.dropdownDisabled {
+  color: rgba(48, 48, 48, 0.5) !important; /* Cor similar ao Bootstrap .disabled */
+  pointer-events: none; /* Bloqueia cliques */
+  cursor: not-allowed !important; /* Muda o cursor para indicar bloqueio */
+}
+
+/* Estiliza o botão do NavDropdown quando está desativado */
+.dropdownDisabled button {
+  pointer-events: none !important; /* Bloqueia cliques */
+  cursor: not-allowed !important; /* Garante que o cursor mude no botão */
+}

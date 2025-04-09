@@ -3,9 +3,6 @@ import axios from "axios";
 const API_URL = "http://localhost:3001";
 
 export const insertUser = async (dataUser) => {
-
-  console.log('dataUser recebido no Services.jsx: ', dataUser)
-
   try {
     const response = await axios({
       method: "POST",
@@ -15,13 +12,24 @@ export const insertUser = async (dataUser) => {
         "Content-Type": "application/json",
       },
     });
+    return response.data;
+  } catch (error) {
+    const message = error.response?.data?.message || "Erro desconhecido";
+    console.error("Erro ao enviar dados do usuário:", message);
+  }
+};
+
+export const checkLogin = async (userDataLogin) => {
+  try {
+    const response = await axios.post(`${API_URL}/check-login`, userDataLogin, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     return response.data;
-
   } catch (error) {
-    alert("erro");
-    console.error("Erro ao enviar dados do usuário:", error);
-    throw error;
+    return { success: false, message: error.response.data.message || "Erro no Login" };
   }
 };
 
@@ -32,7 +40,6 @@ export const insertUser = async (dataUser) => {
 export const getList = async () => {
   try {
     const response = await axios.get(API_URL);
-    // console.log("No services.jsx", response.data);
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar dados", error);

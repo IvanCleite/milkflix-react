@@ -1,22 +1,19 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
-import useAuth from "../../hooks/useAuth.jsx"; // Importa o contexto
+import useAuth from "../../hooks/useAuth.jsx";
 
 const Login = () => {
   const { login } = useAuth();
+  const [form, setForm] = useState({ email: "", passwordLogin: "" });
 
-  const [credentials, setCredentials] = useState({ username: "", password: "" });
-
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-
-    login({ username: credentials.username, password: credentials.password, expiration: new Date().getTime() + 60 * 60 * 1000 });
-
-      // const userData = email; // Apenas email para simular login
-      // login(userData); // Salva no contexto
+    try {
+      await login(form)
+    } catch (error) {
+      alert('Email e/ou senha inválidos')
+    }
 
   };
 
@@ -33,23 +30,21 @@ const Login = () => {
                   <Form.Control
                     type="email"
                     placeholder="Digite seu email"
-                    onChange={(e) =>  setCredentials({ ...credentials, username: e.target.value })}
+                    onChange={(e) => setForm({ ...form, email: e.target.value })}
                     autoFocus
                     required
                   />
                 </Form.Group>
-
-                <Form.Group className="mb-3" controlId="password">
+                <Form.Group className="mb-3" controlId="passwordLogin">
                   <Form.Label>Senha</Form.Label>
                   <Form.Control
                     type="password"
                     placeholder="Digite sua senha"
-                    onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+                    onChange={(e) => setForm({ ...form, passwordLogin: e.target.value })}
                     required
                   />
                 </Form.Group>
-
-                <Button variant="primary" type="submit" className="w-100">
+                <Button variant="primary" type="submit" className="w-100" >
                   Entrar
                 </Button>
               </Form>

@@ -1,12 +1,16 @@
 /* eslint-disable react/prop-types */
 import { createContext, useState, useEffect } from "react";
+import { checkLogin } from "../services/Services";
+import LoginInvalid from "../components/Modals/LoginInvalid";
 
 // Criando o Contexto
 const AuthContext = createContext();
 
 // Provedor de Autenticação
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(()=>{
+  const [loginError, setLoginError] = useState(false);
+  const [messageError, setMessageError] = useState("");
+  const [user, setUser] = useState(() => {
     // Tenta recuperar o usuário salvo
     return JSON.parse(sessionStorage.getItem("user")) || null;
   });
@@ -25,19 +29,23 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = (userData) => {
+  const login = async (userDataLogin) => {
+    const response = await checkLogin(userDataLogin);
 
+    if (!response.success) {
+      // alert(response.message);
+      setMessageError(response.message);
+      setLoginError(true);
+      return;
+    }
 
-
-       // ADICIONAR NO BANCO DE DADOSUSUÁRIO COM SENHA CRIPTOGRAFADA
-       // VERIFICAR EMAIL E SENHA NO BANCO DE DADOS
-
-
-
-
-    const expirationTime = new Date().getTime() + 60 * 60 * 1000; // 1 hora de validade
-    const userWithExpiration = { ...userData, expiration: expirationTime };
-
+    userDataLogin = { ...userDataLogin, credential: response };
+    const expirationTime = new Date().getTime() + 60 * 60 * 3000; // 3 hora de validade
+    const userWithExpiration = {
+      email: userDataLogin.email,
+      role: response.role,
+      expiration: expirationTime,
+    };
     sessionStorage.setItem("user", JSON.stringify(userWithExpiration));
     setUser(userWithExpiration);
   };
@@ -49,9 +57,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {children}
-    </AuthContext.Provider>
+    <>
+      <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;
+      <LoginInvalid
+        show={loginError}
+        handleClose={() => setLoginError(false)}
+        message={messageError}
+      />
+    </>
   );
 };
 

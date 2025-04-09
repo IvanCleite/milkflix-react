@@ -1,19 +1,28 @@
 import getConnection from "../config/db.js";
 
 export const insertUserModel = async (userData) => {
-    const conn = await getConnection();
-    console.log('passou no model')
-    try {
-      // Extrai dinamicamente os campos do objeto
-      const fields = Object.keys(userData).join(", "); // "name, email, password, phone, address, city, state, cep"
-      const values = Object.values(userData);
-      const placeholders = values.map(() => "?").join(", "); // "?, ?, ?, ?, ?, ?, ?, ?"
-  
-      const sql = `INSERT INTO users (${fields}) VALUES (${placeholders})`;
-      const [result] = await conn.query(sql, values);
-  
-      return result.insertId; // Retorna o ID do usuário inserido
-    } catch (error) {
-      throw error;
-    }
-  };
+  const conn = await getConnection();
+  try {
+    // Extrai dinamicamente os campos do objeto
+    const fields = Object.keys(userData).join(", ");
+    const values = Object.values(userData);
+    const placeholders = values.map(() => "?").join(", ");
+
+    const sql = `INSERT INTO users (${fields}) VALUES (${placeholders})`;
+    const result = await conn.query(sql, values);
+
+    return result;
+  } catch (error) {
+    throw new error("(MODELS)Erro ao adicionar o usuário: " + error.message);
+  }
+};
+
+export const checkLoginModel = async (email) => {
+  const conn = await getConnection();
+  try {
+    const result = await conn.query(`SELECT password, role FROM users WHERE email = '${email}' `);
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};

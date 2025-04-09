@@ -8,33 +8,20 @@ import useAuth from "../../hooks/useAuth";
 
 function AppNavbar() {
   const { user, logout } = useAuth();
+
   const location = useLocation();
-  const disabledPages = [
-    "/videoadd",
-    "/videoedit/",
-    "/videodelete/",
-    "/videoshow/",
-    "/useradd",
-  ];
-  let sd = "";
-  const isDisabled = disabledPages.some((page) =>
-    location.pathname.startsWith(page)
-  );
+  const disabledPages = ["/videoadd", "/videoedit/", "/videodelete/", "/videoshow/", "/useradd"];
+  let greeting = "";
+  const isDisabled = disabledPages.some((page) => location.pathname.startsWith(page));
   if (user) {
-    sd = "Olá, " + user.username;
+    greeting = "Olá, " + user.email;
   }
 
   return (
-    <Navbar
-      fixed="top"
-      expand="sm"
-      className={`bg-body-secondary fs-6 ${styles.navbar}`}
-    >
+    <Navbar fixed="top" expand="sm" className={`bg-body-secondary fs-6 ${styles.navbar}`}>
       <Container>
         {isDisabled ? (
-          <Navbar.Brand className="text-danger fs-2 fw-bold">
-            MilkFlix
-          </Navbar.Brand>
+          <Navbar.Brand className="text-danger fs-2 fw-bold">MilkFlix</Navbar.Brand>
         ) : (
           <Navbar.Brand as={Link} className="text-danger fs-2 fw-bold" to={"/"}>
             MilkFlix
@@ -43,34 +30,23 @@ function AppNavbar() {
 
         {user ? (
           <>
-            <span className="text-dark fst-italic fs-6 me-3">
-              {user ? sd : ""}
-            </span>
+            <span className="text-dark fst-italic fs-6 me-3">{user ? greeting : ""}</span>
 
             <div>
-              {user.username === "adm@adm" ? (
+              {user.role === "adm" ? (
                 <>
-                  <Navbar.Toggle
-                    aria-controls="basic-navbar-nav"
-                    className={styles.toggle}
-                  />
+                  <Navbar.Toggle aria-controls="basic-navbar-nav" className={styles.toggle} />
                   <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto fw-medium gap-3">
                       <NavDropdown
                         title={
-                          <span
-                            className={
-                              isDisabled ? styles.dropdownDisabled : ""
-                            }
-                          >
+                          <span className={isDisabled ? styles.dropdownDisabled : ""}>
                             Usuários
                           </span>
                         }
                         id="basic-nav-dropdown"
                         className={isDisabled ? styles.dropdownDisabled : ""}
-                        onToggle={(isOpen, e) =>
-                          isDisabled && e.preventDefault()
-                        }
+                        onToggle={(isOpen, e) => isDisabled && e.preventDefault()}
                       >
                         <NavDropdown.Item as={Link} to={"/useradd"}>
                           Adicionar
@@ -79,11 +55,7 @@ function AppNavbar() {
                         <NavDropdown.Divider />
                         <NavDropdown.Item href="#">Excluir</NavDropdown.Item>
                       </NavDropdown>
-                      <Nav.Link
-                        as={Link}
-                        to={"/videoadd"}
-                        className={isDisabled ? "disabled" : ""}
-                      >
+                      <Nav.Link as={Link} to={"/videoadd"} className={isDisabled ? "disabled" : ""}>
                         Adiciona Vídeo
                       </Nav.Link>
 

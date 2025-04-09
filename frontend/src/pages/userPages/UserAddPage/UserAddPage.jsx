@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Container, Col, Row, Button, Form } from "react-bootstrap";
 import styles from "./UserAddPage.module.css";
 import { insertUser } from "../../../services/Services";
-import UserSaved from "../../../components/Modals/UserSaved";
+import { UserSaved, UserSaveError } from "../../../components/Modals/UserModals";
 import CepNotFound from "../../../components/Modals/CepNotFound";
 import { formatCep, formatCpf, formatPhone } from "../../../components/Formats/Formats";
 import { addressSearch } from "../../../components/AddressSearch/AddressSearch";
@@ -23,13 +23,16 @@ const UserAdd = () => {
     complement: "",
     notes: "",
     password: "",
+    role: "",
   });
 
   const navigate = useNavigate();
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState(false);
   const [cepNotFound, setCepNotFound] = useState(false);
-  const [selected, setSelected] = useState(false);
-  const [addressOk, setAddressOk] = useState(false)
+  const [selectedGender, setSelectedGender] = useState(false);
+  const [selectedRole, setSelectedRole] = useState(false);
+  const [addressOk, setAddressOk] = useState(false);
   const [fullAddress, setFullAddress] = useState({
     logradouro: "",
     localidade: "",
@@ -46,7 +49,7 @@ const UserAdd = () => {
       if (cep.length === 8) {
         handleCepSearch(cep);
       } else {
-        setAddressOk(false)
+        setAddressOk(false);
       }
       value = formatCep(value);
     }
@@ -61,24 +64,29 @@ const UserAdd = () => {
   };
 
   useEffect(() => {
-    if (!formData.sex == "") setSelected(true);
+    if (!formData.gender == "") setSelectedGender(true);
+    if (!formData.role == "") setSelectedRole(true);
   }, [formData]);
 
   const handleCepSearch = async (cep) => {
     try {
       const resAddressSearch = await addressSearch(cep);
       if (resAddressSearch.erro) {
-         console.log("resposta erro", resAddressSearch.erro);
-         setFormData({ ...formData, cep: '' })
-         setAddressOk(false)
-         setCepNotFound(true)
+        console.log("resposta erro", resAddressSearch.erro);
+        setFormData({ ...formData, cep: "" });
+        setAddressOk(false);
+        setCepNotFound(true);
       } else {
-        console.log('resposta ok', resAddressSearch.logradouro)
         setFullAddress({
           logradouro: resAddressSearch.logradouro,
-          localidade: resAddressSearch.bairro + " - " + resAddressSearch.localidade + " - " + resAddressSearch.uf,
+          localidade:
+            resAddressSearch.bairro +
+            " - " +
+            resAddressSearch.localidade +
+            " - " +
+            resAddressSearch.uf,
         });
-        setAddressOk(true)
+        setAddressOk(true);
       }
     } catch (error) {
       console.error("Erro ao buscar endereço:", error);
@@ -93,8 +101,11 @@ const UserAdd = () => {
     formData.phone = unformat(formData.phone);
 
     const response = await insertUser(formData);
-    if (response.message === "Ok") {
+
+    if (response.success) {
       setSaved(true);
+    } else {
+      setSaveError(true);
     }
   };
 
@@ -144,8 +155,8 @@ const UserAdd = () => {
               </Form.Label>
               <Form.Select
                 style={{
-                  color: selected ? "black" : "gray",
-                  fontStyle: !selected && "italic",
+                  color: selectedGender ? "black" : "gray",
+                  fontStyle: !selectedGender && "italic",
                 }}
                 name="gender"
                 value={formData.gender}
@@ -241,7 +252,11 @@ const UserAdd = () => {
                 <Row className="bg-primary bg-opacity-10 bg-gradient rounded-2 ms-auto me-0 shadow mb-2">
                   <Col className="text-end" sm={3}></Col>
                   <Col className="text-primary fst-italic text-start ps-4" sm={12}>
-                    <span>{fullAddress.logradouro + ' '}{formData.number}{' ' + formData.complement}</span>
+                    <span>
+                      {fullAddress.logradouro + " "}
+                      {formData.number}
+                      {" " + formData.complement}
+                    </span>
                     <br />
                     <span>{fullAddress.localidade}</span>
                   </Col>
@@ -286,20 +301,45 @@ const UserAdd = () => {
           </Col>
         </Row>
         <Row>
-          <Form.Group className="mb-3" controlId="password">
-            <Form.Label className="mt-3 float-start ms-2 mb-0 fw-semibold text-black-75">
-              Senha
-            </Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Digite uma senha provisória"
-              name="password"
-              minLength="1"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
+          <Col sm={6}>
+            <Form.Group className="mb-3" controlId="password">
+              <Form.Label className="mt-3 float-start ms-2 mb-0 fw-semibold text-black-75">
+                Senha
+              </Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Digite uma senha provisória"
+                name="password"
+                minLength="1"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+          </Col>
+          <Col sm={6}>
+            <Form.Group className="mb-3" controlId="role">
+              <Form.Label className="mt-3 float-start ms-2 mb-0 fw-semibold text-black-75">
+                Credencial de acesso
+              </Form.Label>
+              <Form.Select
+                style={{
+                  color: selectedRole ? "black" : "gray",
+                  fontStyle: !selectedRole && "italic",
+                }}
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                required
+              >
+                <option value="" disabled>
+                  Selecione a credencial de acesso
+                </option>
+                <option value="user">user</option>
+                <option value="adm">adm</option>
+              </Form.Select>
+            </Form.Group>
+          </Col>
         </Row>
 
         <Row>
@@ -337,6 +377,7 @@ const UserAdd = () => {
 
       <CepNotFound show={cepNotFound} handleClose={() => setCepNotFound(false)} />
       <UserSaved show={saved} handleClose={() => setSaved(false)} />
+      <UserSaveError show={saveError} handleClose={() => setSaveError(false)} />
     </Container>
   );
 };

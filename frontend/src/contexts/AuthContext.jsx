@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import { createContext, useState, useEffect } from "react";
-import { checkLogin } from "../services/Services";
-import LoginInvalid from "../components/Modals/LoginInvalid";
+import { createContext, useState, useEffect } from 'react';
+import { checkLogin } from '../services/api';
+import LoginInvalid from '../components/Modals/LoginInvalid';
 
 // Criando o Contexto
 const AuthContext = createContext();
@@ -9,14 +9,14 @@ const AuthContext = createContext();
 // Provedor de Autenticação
 export const AuthProvider = ({ children }) => {
   const [loginError, setLoginError] = useState(false);
-  const [messageError, setMessageError] = useState("");
+  const [messageError, setMessageError] = useState('');
   const [user, setUser] = useState(() => {
     // Tenta recuperar o usuário salvo
-    return JSON.parse(sessionStorage.getItem("user")) || null;
+    return JSON.parse(sessionStorage.getItem('user')) || null;
   });
 
   useEffect(() => {
-    const storedUser = sessionStorage.getItem("user");
+    const storedUser = sessionStorage.getItem('user');
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
 
@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
       if (new Date().getTime() < parsedUser.expiration) {
         setUser(parsedUser);
       } else {
-        sessionStorage.removeItem("user");
+        sessionStorage.removeItem('user');
       }
     }
   }, []);
@@ -46,19 +46,21 @@ export const AuthProvider = ({ children }) => {
       role: response.role,
       expiration: expirationTime,
     };
-    sessionStorage.setItem("user", JSON.stringify(userWithExpiration));
+    sessionStorage.setItem('user', JSON.stringify(userWithExpiration));
     setUser(userWithExpiration);
   };
 
   // Simulação de logout
   const logout = () => {
-    sessionStorage.removeItem("user");
+    sessionStorage.removeItem('user');
     setUser(null);
   };
 
   return (
     <>
-      <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;
+      <AuthContext.Provider value={{ user, login, logout }}>
+        {children}
+      </AuthContext.Provider>
       <LoginInvalid
         show={loginError}
         handleClose={() => setLoginError(false)}

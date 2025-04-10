@@ -1,29 +1,33 @@
 /* eslint-disable no-unused-vars */
-import { useState, useEffect, forwardRef } from "react";
-import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
-import { Container, Col, Row, Button, Form } from "react-bootstrap";
-import styles from "./UserAddPage.module.css";
-import { insertUser } from "../../../services/Services";
-import { UserSaved, UserSaveError } from "../../../components/Modals/UserModals";
-import CepNotFound from "../../../components/Modals/CepNotFound";
-import { formatCep, formatCpf, formatPhone } from "../../../components/Formats/Formats";
-import { addressSearch } from "../../../components/AddressSearch/AddressSearch";
+import { useState, useEffect, forwardRef } from 'react';
+import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
+import { Container, Col, Row, Button, Form } from 'react-bootstrap';
+import styles from './AddPage.module.css';
+import { insertUser } from '../../services/api';
+import { UserSaved, UserSaveError } from '../../components/Modals/UserModals';
+import CepNotFound from '../../components/Modals/CepNotFound';
+import {
+  formatCep,
+  formatCpf,
+  formatPhone,
+} from '../../components/Formats';
+import { addressSearch } from '../../components/AddressSearch';
 
 const UserAdd = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    birth: "",
-    gender: "",
-    cpf: "",
-    email: "",
-    phone: "",
-    cep: "",
-    number: "",
-    complement: "",
-    notes: "",
-    password: "",
-    role: "",
+    name: '',
+    birth: '',
+    gender: '',
+    cpf: '',
+    email: '',
+    phone: '',
+    cep: '',
+    number: '',
+    complement: '',
+    notes: '',
+    password: '',
+    role: '',
   });
 
   const navigate = useNavigate();
@@ -34,17 +38,17 @@ const UserAdd = () => {
   const [selectedRole, setSelectedRole] = useState(false);
   const [addressOk, setAddressOk] = useState(false);
   const [fullAddress, setFullAddress] = useState({
-    logradouro: "",
-    localidade: "",
+    logradouro: '',
+    localidade: '',
   });
 
-  const unformat = (value) => value.replace(/\D/g, "");
+  const unformat = (value) => value.replace(/\D/g, '');
 
   const handleChange = (e) => {
     let { name, value } = e.target;
 
     // Máscara no formato '12.425-002' somente para exibição no formulário
-    if (name === "cep") {
+    if (name === 'cep') {
       const cep = unformat(value);
       if (cep.length === 8) {
         handleCepSearch(cep);
@@ -55,25 +59,25 @@ const UserAdd = () => {
     }
 
     // Máscara no formato '868.542.332-14' somente para exibição no formulário
-    if (name === "cpf") value = formatCpf(value);
+    if (name === 'cpf') value = formatCpf(value);
 
     // Máscara no formato '(12) 98655-4522' somente para exibição no formulário
-    if (name === "phone") value = formatPhone(value);
+    if (name === 'phone') value = formatPhone(value);
 
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   useEffect(() => {
-    if (!formData.gender == "") setSelectedGender(true);
-    if (!formData.role == "") setSelectedRole(true);
+    if (!formData.gender == '') setSelectedGender(true);
+    if (!formData.role == '') setSelectedRole(true);
   }, [formData]);
 
   const handleCepSearch = async (cep) => {
     try {
       const resAddressSearch = await addressSearch(cep);
       if (resAddressSearch.erro) {
-        console.log("resposta erro", resAddressSearch.erro);
-        setFormData({ ...formData, cep: "" });
+        console.log('resposta erro', resAddressSearch.erro);
+        setFormData({ ...formData, cep: '' });
         setAddressOk(false);
         setCepNotFound(true);
       } else {
@@ -81,15 +85,15 @@ const UserAdd = () => {
           logradouro: resAddressSearch.logradouro,
           localidade:
             resAddressSearch.bairro +
-            " - " +
+            ' - ' +
             resAddressSearch.localidade +
-            " - " +
+            ' - ' +
             resAddressSearch.uf,
         });
         setAddressOk(true);
       }
     } catch (error) {
-      console.error("Erro ao buscar endereço:", error);
+      console.error('Erro ao buscar endereço:', error);
     }
   };
 
@@ -155,8 +159,8 @@ const UserAdd = () => {
               </Form.Label>
               <Form.Select
                 style={{
-                  color: selectedGender ? "black" : "gray",
-                  fontStyle: !selectedGender && "italic",
+                  color: selectedGender ? 'black' : 'gray',
+                  fontStyle: !selectedGender && 'italic',
                 }}
                 name="gender"
                 value={formData.gender}
@@ -246,16 +250,21 @@ const UserAdd = () => {
           <>
             <Row>
               <Col sm={3} className="ms-auto text-md-end align-content-center">
-                <span className="text-danger fw-bold fs-5 fst-italic">Confira o endereço:</span>
+                <span className="text-danger fw-bold fs-5 fst-italic">
+                  Confira o endereço:
+                </span>
               </Col>
               <Col sm={6}>
                 <Row className="bg-primary bg-opacity-10 bg-gradient rounded-2 ms-auto me-0 shadow mb-2">
                   <Col className="text-end" sm={3}></Col>
-                  <Col className="text-primary fst-italic text-start ps-4" sm={12}>
+                  <Col
+                    className="text-primary fst-italic text-start ps-4"
+                    sm={12}
+                  >
                     <span>
-                      {fullAddress.logradouro + " "}
+                      {fullAddress.logradouro + ' '}
                       {formData.number}
-                      {" " + formData.complement}
+                      {' ' + formData.complement}
                     </span>
                     <br />
                     <span>{fullAddress.localidade}</span>
@@ -324,8 +333,8 @@ const UserAdd = () => {
               </Form.Label>
               <Form.Select
                 style={{
-                  color: selectedRole ? "black" : "gray",
-                  fontStyle: !selectedRole && "italic",
+                  color: selectedRole ? 'black' : 'gray',
+                  fontStyle: !selectedRole && 'italic',
                 }}
                 name="role"
                 value={formData.role}
@@ -368,14 +377,21 @@ const UserAdd = () => {
           </Col>
 
           <Col sm={6}>
-            <Button variant="primary" className="w-100" onClick={() => navigate("/")}>
+            <Button
+              variant="primary"
+              className="w-100"
+              onClick={() => navigate('/')}
+            >
               Voltar para o início
             </Button>
           </Col>
         </Row>
       </Form>
 
-      <CepNotFound show={cepNotFound} handleClose={() => setCepNotFound(false)} />
+      <CepNotFound
+        show={cepNotFound}
+        handleClose={() => setCepNotFound(false)}
+      />
       <UserSaved show={saved} handleClose={() => setSaved(false)} />
       <UserSaveError show={saveError} handleClose={() => setSaveError(false)} />
     </Container>

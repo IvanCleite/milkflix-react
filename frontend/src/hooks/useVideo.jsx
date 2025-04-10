@@ -1,5 +1,5 @@
-import { useContext } from "react";
-import VideoContext from "../context/VideoContext";
+import { useContext } from 'react';
+import VideoContext from '../contexts/VideoContext';
 
 // Hook customizado para facilitar o uso do contexto
 const useVideo = () => {
@@ -7,4 +7,3 @@ const useVideo = () => {
 };
 
 export default useVideo;
-

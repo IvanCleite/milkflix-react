@@ -1,19 +1,19 @@
-import { useLocation } from "react-router-dom";
-import { Container, Row, Col } from "react-bootstrap";
-import { useState } from "react";
-import CaptureImage from "../../../components/VideoAddComponents/CaptureImage";
-import FormDataVideo from "../../../components/VideoAddComponents/FormDataVideo";
+import { useLocation } from 'react-router-dom';
+import { Container, Row, Col } from 'react-bootstrap';
+import { useState } from 'react';
+import CaptureImage from '../../components/VideoAdd/CaptureImage';
+import FormDataVideo from '../../components/VideoAdd/Form';
 // import styles from './VideoShowPage.module.css'
 
 const VideoEdit = () => {
   const location = useLocation();
   const rec = location.state?.rec;
-  console.log("EditPage", rec.id);
+  console.log('EditPage', rec.id);
 
   const [videoSrc, setVideoSrc] = useState(
     `/assets/videos/${rec.id}-video.mp4`
   );
-  
+
   const [image, setImage] = useState(`/assets/images/${rec.id}-image.png`);
   const [formData, setFormData] = useState({
     title: rec.title,
@@ -39,7 +39,7 @@ const VideoEdit = () => {
               className="rounded-3 shadow"
               src={image}
               alt="Captura"
-              style={{ maxWidth: "100%" }}
+              style={{ maxWidth: '100%' }}
             />
           </div>
         </Col>
@@ -58,7 +58,6 @@ const VideoEdit = () => {
               Salvar alterações
             </a>
           </Col>
-
         </Row>
       </Row>
     </Container>

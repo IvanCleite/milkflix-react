@@ -1,5 +1,5 @@
-import { useContext } from "react";
-import AuthContext from "../context/AuthContext";
+import { useContext } from 'react';
+import AuthContext from '../contexts/AuthContext';
 
 // Hook customizado para facilitar o uso do contexto
 const useAuth = () => {
@@ -7,4 +7,3 @@ const useAuth = () => {
 };
 
 export default useAuth;
-

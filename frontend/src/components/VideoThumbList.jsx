@@ -1,8 +1,8 @@
 import { Row, Col } from "react-bootstrap";
-import useVideo from "../../hooks/useVideo";
+import useVideo from "../hooks/useVideo";
 import { Link } from "react-router-dom";
 import styles from "./VideoThumbList.module.css";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../hooks/useAuth";
 
 const VideoThumbList = () => {
   const { user } = useAuth()
@@ -34,7 +34,7 @@ const VideoThumbList = () => {
             </div>
           </Link>
           
-          {user.username === 'adm@adm' && (
+          {user.role === 'adm' && (
             <Row className="d-flex justify-content-around">
             <Col>
               <Link

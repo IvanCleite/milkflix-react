@@ -8,8 +8,8 @@ import {
   NotFound,
   Login,
   UserAdd,
-} from "../pages";
-import PrivateRoute from "../components/PrivateRoute/PrivateRoute";
+} from "./pages";
+import PrivateRoute from "./components/PrivateRoutes";
 
 export function AppRoutes() {
   return (
@@ -25,5 +25,5 @@ export function AppRoutes() {
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
-  );
+  )
 }

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { createContext, useState, useEffect } from "react";
-import { getList } from "../services/Services";
+import { getList } from "../services/api";
 
 // Criando o contexto
 const VideoContext = createContext();

@@ -1,5 +1,5 @@
 import { AppRoutes } from "./AppRoutes.jsx";
-import AppNavbar from "./components/AppNavbar.jsx";
+import AppNavbar from "./AppNavbar.jsx";
 import useAuth from "./hooks/useAuth.jsx";
 import "./App.css";
 

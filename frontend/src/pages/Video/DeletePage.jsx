@@ -7,7 +7,7 @@ const VideoDelete = () => {
   return (
     <div className="mt-5">
       <h3>VideoDeletePage: {rec.id}</h3>
-      <a href="/" className="btn btn-warning mt-4 shadow w-100">
+      <a href="/home" className="btn btn-warning mt-4 shadow w-100">
         Voltar para o início
       </a>
     </div>

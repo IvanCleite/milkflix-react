@@ -1,32 +1,25 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3001";
+export const api = axios.create({
+  baseURL: "http://localhost:3001",
+  headers: { "Content-Type": "application/json" }
+})
 
 export const insertUser = async (dataUser) => {
   try {
-    const response = await axios({
-      method: "POST",
-      url: `${API_URL}/insert-user`,
-      data: dataUser,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await api.post('/insert-user', { dataUser })
     return response.data;
+    
   } catch (error) {
     const message = error.response?.data?.message || "Erro desconhecido";
     console.error("Erro ao enviar dados do usuário:", message);
   }
 };
 
-export const checkLogin = async (userDataLogin) => {
+export const checkLogin = async (email, password) => {
   try {
-    const response = await axios.post(`${API_URL}/check-login`, userDataLogin, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
+    const response = await api.post('/check-login', { email, password });
+    console.log('respnse.data no api.jsx: ', response.data)
     return response.data;
   } catch (error) {
     return { success: false, message: error.response.data.message || "Erro no Login" };
@@ -39,7 +32,7 @@ export const checkLogin = async (userDataLogin) => {
 
 export const getList = async () => {
   try {
-    const response = await axios.get(API_URL);
+    const response = await api.get('/');
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar dados", error);
@@ -58,11 +51,7 @@ export const insertVideo = async (dataVideo) => {
   console.log("FormData enviado: ", [...formData.entries()]);
 
   try {
-    const response = await axios.post(`${API_URL}/insert-video`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const response = await api.post('/insert-video', { formData } );
     console.log("InserVideo: ", response.data);
     return response.data;
   } catch (error) {

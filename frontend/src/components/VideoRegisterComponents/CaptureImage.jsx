@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useRef, useState } from "react";
 import { Container, Button } from "react-bootstrap";
-import styles from "./VideoAddComponents.module.css";
+import styles from "./CaptureImage.module.css";
 
 const CaptureImage = ({ videoSrc, image }) => {
   const videoRef = useRef(null);

@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Col, Row, Button, Form } from 'react-bootstrap';
 import { insertVideo } from '../../services/api';
 import VideoSaved from '../../components/Modals/VideoSaved';
-import SelectVideo from '../../components/VideoAdd/SelectVideo';
-import CaptureImage from '../../components/VideoAdd/CaptureImage';
-import FormDataVideo from '../../components/VideoAdd/Form';
+import SelectVideo from '../../components/VideoRegisterComponents/SelectVideo';
+import CaptureImage from '../../components/VideoRegisterComponents/CaptureImage';
+import FormDataVideo from '../../components/VideoRegisterComponents/Form';
 
 // Função para converter base64 em Blob
 const base64ToBlob = (base64, mimeType) => {
@@ -114,7 +114,7 @@ const VideoAdd = () => {
             <Button
               variant="primary"
               className="mt-4 shadow w-100"
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/home')}
             >
               Voltar para o início
             </Button>

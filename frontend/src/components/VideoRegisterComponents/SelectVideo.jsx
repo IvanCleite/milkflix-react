@@ -27,7 +27,7 @@ const SelectVideo = ({ video }) => {
       <Button
         variant="outline-primary"
         className="mt-4 shadow w-100"
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/home")}
       >
         Voltar para o início
       </Button>

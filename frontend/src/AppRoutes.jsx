@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route } from 'react-router-dom';
 import {
   Home,
   VideoAdd,
@@ -8,15 +8,17 @@ import {
   NotFound,
   Login,
   UserAdd,
-} from "./pages";
-import PrivateRoute from "./components/PrivateRoutes";
+  ForgotPassword
+} from './pages';
+import PrivateRoute from './components/PrivateRoutes';
 
 export function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route element={<PrivateRoute />}>
+        <Route path="/home" element={<Home />} />
         <Route path="/videoadd" element={<VideoAdd />} />
         <Route path="/videoedit/:id" element={<VideoEdit />} />
         <Route path="/videodelete/:id" element={<VideoDelete />} />
@@ -25,5 +27,5 @@ export function AppRoutes() {
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
-  )
+  );
 }

@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { insertVideo, videoList } from "../models/videoModels.js";
+import { insertVideo, videoList } from "../models/video-model.js";
 
 // Configuração do __dirname no ES6
 const __filename = fileURLToPath(import.meta.url);

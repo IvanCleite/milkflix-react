@@ -1,10 +1,10 @@
 import { useLocation } from "react-router-dom";
-import { Container, Button, Row, Col } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Container, Row, Col } from "react-bootstrap";
+import useModalActions from "../../hooks/useModalActions";
 import styles from "./ShowPage.module.css";
 
 const VideoShow = () => {
-  const navigate = useNavigate();
+  const { goToRoute } = useModalActions()
   const location = useLocation();
   const rec = location.state?.rec;
 
@@ -29,9 +29,7 @@ const VideoShow = () => {
         </Row>
 
         <Col xs={8} sm={6} md={4} lg={4}>
-          <Button variant="primary" className="mt-4 shadow w-100" onClick={() => navigate("/")}>
-            Voltar para o início
-          </Button>
+        {goToRoute('/home', 'fechar', 'outline-secondary')}
         </Col>
       </Row>
     </Container>

@@ -1,18 +1,40 @@
-/* eslint-disable no-unused-vars */
 import { useState } from 'react';
+import { AlertTriangle } from 'react-feather'
 import { Form, Button, Container, Row, Col, Card } from 'react-bootstrap';
 import useAuth from '../hooks/useAuth.jsx';
+import { useNavigate, Link } from 'react-router-dom';
+import useModal from '../hooks/useModal';
+import useModalActions from '../hooks/useModalActions.jsx';
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { showModal } = useModal();
+  const { closeOnly } = useModalActions();
   const { login } = useAuth();
-  const [form, setForm] = useState({ email: '', passwordLogin: '' });
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const isFormValid = email.trim() !== '' && password.trim() !== '';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await login(form);
-    } catch (error) {
-      alert('Email e/ou senha inválidos');
+    const result = await login(email, password);
+    console.log('result no Login: ', result);
+    // let modalBody = '';
+    if (result.success) {
+      navigate('/home');
+    } else {
+      const modalBody = () =>
+        result.message === 'E-mail não encontrado'
+          ? 'Confira ou contate o administrador'
+          : 'Confira ou clique em "Esqueci minha senha"';
+
+      showModal(result.message || 'Erro', modalBody, closeOnly(), {
+        size: 'md',
+        centered: false,
+        icon: <AlertTriangle color="red" />,
+        keyboard: true,
+        backdrop: true,
+      });
     }
   };
 
@@ -22,16 +44,14 @@ const Login = () => {
         <Col>
           <Card className="p-4 shadow-lg">
             <Card.Body>
-              <h3 className="text-center mb-4">Login</h3>
+              <h3 className="text-center text-primary fw-bold mb-4">Login</h3>
               <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="email">
                   <Form.Label>Email</Form.Label>
                   <Form.Control
                     type="email"
                     placeholder="Digite seu email"
-                    onChange={(e) =>
-                      setForm({ ...form, email: e.target.value })
-                    }
+                    onChange={(e) => setEmail(e.target.value)}
                     autoFocus
                     required
                   />
@@ -41,16 +61,24 @@ const Login = () => {
                   <Form.Control
                     type="password"
                     placeholder="Digite sua senha"
-                    onChange={(e) =>
-                      setForm({ ...form, passwordLogin: e.target.value })
-                    }
+                    onChange={(e) => setPassword(e.target.value)}
                     required
                   />
                 </Form.Group>
-                <Button variant="primary" type="submit" className="w-100">
+                <Button
+                  variant="primary"
+                  type="submit"
+                  disabled={!isFormValid}
+                  className="w-100"
+                >
                   Entrar
                 </Button>
-                <div className="mt-3">Esqueceu a senha?</div>
+                <Link
+                  to="/forgot-password"
+                  className="mt-3 d-block text-center"
+                >
+                  Esqueci minha senha senha
+                </Link>
               </Form>
             </Card.Body>
           </Card>

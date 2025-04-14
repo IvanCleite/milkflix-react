@@ -7,6 +7,7 @@ import useAuth from "../hooks/useAuth";
 const VideoThumbList = () => {
   const { user } = useAuth()
   const { videoList, loading } = useVideo();
+  console.log('user no ThumbList: ', user)
   if (loading) return <p>🔄 Carregando vídeos...</p>;
 
   if (Object.keys(videoList).length === 0) {

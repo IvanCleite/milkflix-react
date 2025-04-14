@@ -1,5 +1,18 @@
 import getConnection from "../config/db.js";
 
+
+
+export const findUserByEmail = async (email) => {
+  console.log('email no model: ', email)
+  const conn = await getConnection();
+  try {
+    const [rows] = await conn.query('SELECT id, email FROM users WHERE email = ?', [email]);
+    return rows.length > 0 ? rows[0] : null;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const insertUserModel = async (userData) => {
   const conn = await getConnection();
   try {
@@ -18,9 +31,11 @@ export const insertUserModel = async (userData) => {
 };
 
 export const checkLoginModel = async (email) => {
+  console.log('email no model: ', email)
   const conn = await getConnection();
   try {
     const result = await conn.query(`SELECT password, role FROM users WHERE email = '${email}' `);
+    console.log('result no model: ', result)
     return result;
   } catch (error) {
     throw error;

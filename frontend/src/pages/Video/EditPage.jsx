@@ -1,9 +1,9 @@
+/* eslint-disable no-unused-vars */
 import { useLocation } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useState } from 'react';
-import CaptureImage from '../../components/VideoAdd/CaptureImage';
-import FormDataVideo from '../../components/VideoAdd/Form';
-// import styles from './VideoShowPage.module.css'
+import CaptureImage from '../../components/VideoRegisterComponents/CaptureImage';
+import FormDataVideo from '../../components/VideoRegisterComponents/Form';
 
 const VideoEdit = () => {
   const location = useLocation();
@@ -49,12 +49,12 @@ const VideoEdit = () => {
         </Col>
         <Row className="mt-4">
           <Col sm={12} lg={6}>
-            <a href="/" className="btn btn-warning mt-4 shadow w-100">
+            <a href="/home" className="btn btn-warning mt-4 shadow w-100">
               Voltar para o início
             </a>
           </Col>
           <Col sm={12} lg={6}>
-            <a href="/" className="btn btn-success mt-4 shadow w-100">
+            <a href="/home" className="btn btn-success mt-4 shadow w-100">
               Salvar alterações
             </a>
           </Col>

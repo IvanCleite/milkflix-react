@@ -3,18 +3,17 @@ import { useState, useEffect, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { Container, Col, Row, Button, Form } from 'react-bootstrap';
-import styles from './AddPage.module.css';
+import styles from './RegisterPage.module.css';
 import { insertUser } from '../../services/api';
 import { UserSaved, UserSaveError } from '../../components/Modals/UserModals';
-import CepNotFound from '../../components/Modals/CepNotFound';
-import {
-  formatCep,
-  formatCpf,
-  formatPhone,
-} from '../../components/Formats';
+import { formatCep, formatCpf, formatPhone } from '../../components/Formats';
 import { addressSearch } from '../../components/AddressSearch';
+import useModal from '../../hooks/useModal';
+import useModalActions from '../../hooks/useModalActions';
 
 const UserAdd = () => {
+  const { showModal } = useModal();
+  const { goToRoute, closeOnly } = useModalActions();
   const [formData, setFormData] = useState({
     name: '',
     birth: '',
@@ -76,10 +75,10 @@ const UserAdd = () => {
     try {
       const resAddressSearch = await addressSearch(cep);
       if (resAddressSearch.erro) {
-        console.log('resposta erro', resAddressSearch.erro);
+        showModal('CEP não encontrado', formatCep(cep), closeOnly());
         setFormData({ ...formData, cep: '' });
         setAddressOk(false);
-        setCepNotFound(true);
+        // setCepNotFound(true);
       } else {
         setFullAddress({
           logradouro: resAddressSearch.logradouro,
@@ -371,27 +370,16 @@ const UserAdd = () => {
 
         <Row className="mt-5">
           <Col sm={6}>
-            <Button variant="primary" type="submit" className="w-100">
+            <Button variant="outline-primary" type="submit" className="w-100">
               Adicionar
             </Button>
           </Col>
 
           <Col sm={6}>
-            <Button
-              variant="primary"
-              className="w-100"
-              onClick={() => navigate('/')}
-            >
-              Voltar para o início
-            </Button>
+            {goToRoute('/home', 'Voltar para o inícioar', 'outline-primary')}
           </Col>
         </Row>
       </Form>
-
-      <CepNotFound
-        show={cepNotFound}
-        handleClose={() => setCepNotFound(false)}
-      />
       <UserSaved show={saved} handleClose={() => setSaved(false)} />
       <UserSaveError show={saveError} handleClose={() => setSaveError(false)} />
     </Container>
